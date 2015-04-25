@@ -6,7 +6,7 @@ g_height = 0
 g_matrix = {}
 
 g_tick = 0
-g_speed = 0.2 -- seconds
+g_speed = 0.1 -- seconds
 
 SNAKE_A = "SNAKE_A"
 SNAKE_B = "SNAKE_B"
@@ -27,6 +27,9 @@ b_head_y = 0
 
 a_apples = 0
 b_apples = 0
+
+g_max_apples = 17
+g_apple_count = 0
 
 -------------------------------------------------------------------------------
 function M(x, y) 
@@ -74,8 +77,6 @@ function love.load()
 	a_tail_y = a_head_y
 
 	M(b_head_x, b_head_y).b = true
-
-	M(20, 20).apples = 4
 end
 
 -------------------------------------------------------------------------------
@@ -101,6 +102,10 @@ function update_snake_a()
 	a_head_x = math.floor((a_head_x + dx + g_width) % g_width)
 	a_head_y = math.floor((a_head_y + dy + g_height) % g_height)
 	local head = M(a_head_x, a_head_y)
+	if head.a then
+		-- snake dead
+		love.event.push("quit")
+	end 
 	head.a = true
 	head.a_prev_x = nil
 	head.a_prev_y = nil	
@@ -110,7 +115,9 @@ function update_snake_a()
 	old_head.a_prev_y = a_head_y
 	local tail = M(a_tail_x, a_tail_y)
 	if M(a_head_x, a_head_y).apples then
-		a_apples = M(a_head_x, a_head_y).apples
+		a_apples = a_apples + M(a_head_x, a_head_y).apples
+		M(a_head_x, a_head_y).apples = nil
+		g_apple_count = g_apple_count - 1
 	end
 	if a_apples > 0 then
 		a_apples = a_apples - 1
@@ -125,6 +132,19 @@ end
 function update_snake_b()
 end 
 
+
+-------------------------------------------------------------------------------
+function update_apples()
+	if g_apple_count < g_max_apples then
+		local x = math.floor( love.math.random() * g_width )
+		local y = math.floor( love.math.random() * g_height )
+		if not M(x, y).apples then
+			M(x, y).apples = 4
+			g_apple_count = g_apple_count + 1
+		end
+	end
+end 
+
 -------------------------------------------------------------------------------
 function love.update(dt)
 	g_tick = g_tick + dt
@@ -134,6 +154,7 @@ function love.update(dt)
 	g_tick = g_tick - g_speed
 	update_snake_a()
 	update_snake_b()
+	update_apples()
 end
 
 
