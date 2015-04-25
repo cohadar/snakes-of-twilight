@@ -47,15 +47,27 @@ function love.load()
 
 	b_head_x = 10
 	b_head_y = 20
-	M(a_head_x,   a_head_y).a =  true
-	
-	M(a_head_x-1,   a_head_y).a =  true
-	M(a_head_x-1,   a_head_y).a_prev_x = a_head_x
-	M(a_head_x-1,   a_head_y).a_prev_y = a_head_y
 
-	M(a_head_x-2,   a_head_y).a =  true
-	M(a_head_x-2,   a_head_y).a_prev_x =  a_head_x - 1
-	M(a_head_x-2,   a_head_y).a_prev_y =  a_head_y 
+	local head = M(a_head_x, a_head_y)
+	head.a =  true
+	head.a_prev_x = nil
+	head.a_prev_y = nil
+	head.a_next_x = a_head_x - 1
+	head.a_next_y = a_head_y
+	
+	local body = M(a_head_x-1, a_head_y)
+	body.a =  true
+	body.a_prev_x = a_head_x
+	body.a_prev_y = a_head_y
+	body.a_next_x = a_head_x - 2
+	body.a_next_y = a_head_y
+
+	local tail = M(a_head_x-2, a_head_y)
+	tail.a =  true
+	tail.a_prev_x = a_head_x - 1
+	tail.a_prev_y = a_head_y 
+	tail.a_next_x = nil
+	tail.a_next_y = nil
 
 	a_tail_x = a_head_x - 2
 	a_tail_y = a_head_y
@@ -82,11 +94,17 @@ function update_snake_a()
 	end
 	local old_x = a_head_x
 	local old_y = a_head_y
+	local old_head = M(a_head_x, a_head_y)
 	a_head_x = math.floor((a_head_x + dx + g_width) % g_width)
 	a_head_y = math.floor((a_head_y + dy + g_height) % g_height)
-	M(a_head_x, a_head_y).a = true
-	M(old_x, old_y).a_prev_x = a_head_x
-	M(old_x, old_y).a_prev_y =  a_head_y
+	local head = M(a_head_x, a_head_y)
+	head.a = true
+	head.a_prev_x = nil
+	head.a_prev_y = nil	
+	head.a_next_x = old_x
+	head.a_next_y = old_y
+	old_head.a_prev_x = a_head_x
+	old_head.a_prev_y = a_head_y
 	local tail = M(a_tail_x, a_tail_y)
 	tail.a = false
 	a_tail_x = tail.a_prev_x
@@ -108,24 +126,25 @@ function love.update(dt)
 	update_snake_b()
 end
 
+
 -------------------------------------------------------------------------------
 function love.keypressed(key)
 	if key == "escape" then
 		love.event.push("quit")
 	elseif key == "up" then
-		if a_direction ~= SOUTH then
+		if M(a_head_x, a_head_y).a_next_x ~= a_head_x then
 			a_direction = NORTH
 		end
 	elseif key == "down" then
-		if a_direction ~= NORTH then
+		if M(a_head_x, a_head_y).a_next_x ~= a_head_x then
 			a_direction = SOUTH
 		end
 	elseif key == "left" then
-		if a_direction ~= EAST then
+		if M(a_head_x, a_head_y).a_next_y ~= a_head_y then
 			a_direction = WEST
 		end
 	elseif key == "right" then
-		if a_direction ~= WEST then
+		if M(a_head_x, a_head_y).a_next_y ~= a_head_y then
 			a_direction = EAST
 		end
 	end
