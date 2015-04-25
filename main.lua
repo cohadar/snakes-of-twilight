@@ -19,17 +19,15 @@ WEST  = "WEST"
 a_direction = EAST
 b_direction = EAST
 
-a_head = { x = 0, y = 0 }
-b_head = { x = 0, y = 0 }
+a_head_x = 0
+a_head_y = 0
+
+b_head_x = 0
+b_head_y = 0
 
 -------------------------------------------------------------------------------
-function get_property(x, y, name) 
-	return g_matrix[ y * g_width + x ][ name ]
-end
-
--------------------------------------------------------------------------------
-function set_property(x, y, name, value) 
-	g_matrix[ y * g_width + x ][ name ] = value
+function M(x, y) 
+	return g_matrix[ y * g_width + x ]
 end
 
 -------------------------------------------------------------------------------
@@ -44,18 +42,25 @@ function love.load()
 		g_matrix[ y * g_width + x ] = {}
 	end
 	end
-	a_head.x = 10
-	a_head.y = 10
+	a_head_x = 10
+	a_head_y = 10
 
-	b_head.x = 10
-	b_head.y = 20
-	set_property(a_head.x,   a_head.y, SNAKE_A, true)
-	set_property(a_head.x-1, a_head.y, SNAKE_A, true)
-	set_property(a_head.x-2, a_head.y, SNAKE_A, true)
-	set_property(a_head.x-3, a_head.y, SNAKE_A, true)
-	set_property(a_head.x-4, a_head.y, SNAKE_A, true)
+	b_head_x = 10
+	b_head_y = 20
+	M(a_head_x,   a_head_y).a =  true
+	
+	M(a_head_x-1,   a_head_y).a =  true
+	M(a_head_x-1,   a_head_y).a_prev_x = a_head_x
+	M(a_head_x-1,   a_head_y).a_prev_y = a_head_y
 
-	set_property(b_head.x, b_head.y, SNAKE_B, true)
+	M(a_head_x-2,   a_head_y).a =  true
+	M(a_head_x-2,   a_head_y).a_prev_x =  a_head_x - 1
+	M(a_head_x-2,   a_head_y).a_prev_y =  a_head_y 
+
+	a_tail_x = a_head_x - 2
+	a_tail_y = a_head_y
+
+	M(b_head_x, b_head_y).b = true
 end
 
 -------------------------------------------------------------------------------
@@ -75,10 +80,17 @@ function update_snake_a()
 		dx = -1
 		dy = 0
 	end
-	set_property(a_head.x, a_head.y, SNAKE_A, false)
-	a_head.x = math.floor((a_head.x + dx + g_width) % g_width)
-	a_head.y = math.floor((a_head.y + dy + g_height) % g_height)
-	set_property(a_head.x, a_head.y, SNAKE_A, true)
+	local old_x = a_head_x
+	local old_y = a_head_y
+	a_head_x = math.floor((a_head_x + dx + g_width) % g_width)
+	a_head_y = math.floor((a_head_y + dy + g_height) % g_height)
+	M(a_head_x, a_head_y).a = true
+	M(old_x, old_y).a_prev_x = a_head_x
+	M(old_x, old_y).a_prev_y =  a_head_y
+	local tail = M(a_tail_x, a_tail_y)
+	tail.a = false
+	a_tail_x = tail.a_prev_x
+	a_tail_y = tail.a_prev_y
 end 
 
 -------------------------------------------------------------------------------
@@ -101,13 +113,21 @@ function love.keypressed(key)
 	if key == "escape" then
 		love.event.push("quit")
 	elseif key == "up" then
-		a_direction = NORTH
+		if a_direction ~= SOUTH then
+			a_direction = NORTH
+		end
 	elseif key == "down" then
-		a_direction = SOUTH
+		if a_direction ~= NORTH then
+			a_direction = SOUTH
+		end
 	elseif key == "left" then
-		a_direction = WEST
+		if a_direction ~= EAST then
+			a_direction = WEST
+		end
 	elseif key == "right" then
-		a_direction = EAST
+		if a_direction ~= WEST then
+			a_direction = EAST
+		end
 	end
 end
 
@@ -151,11 +171,11 @@ end
 function love.draw()
 	for x = 0, g_width-1 do 
 		for y = 0, g_height-1 do 
-			if get_property(x, y, SNAKE_A) then
+			if x == a_head_x and y == a_head_y then
 				draw_head_a(x, y)
-			elseif get_property(x, y, SNAKE_A) then
+			elseif M(x, y).a then
 				draw_tail_a(x, y)	
-			elseif get_property(x, y, SNAKE_B) then
+			elseif x == b_head_x and y == b_head_y then
 				draw_head_b(x, y)
 			elseif x % 2 == 0 and y % 2 == 0 then
 				draw_background_2(x, y)
@@ -166,7 +186,7 @@ function love.draw()
 			love.graphics.rectangle("line", x*g_rect, y*g_rect, g_rect, g_rect)
 		end
 	end
-	love.graphics.print("x=".. a_head.x ..", y=" .. a_head.y, 100, 100)
+	love.graphics.print("x=".. a_head_x ..", y=" .. a_head_y, 100, 100)
 end
 
 -------------------------------------------------------------------------------
