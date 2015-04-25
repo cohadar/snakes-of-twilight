@@ -5,8 +5,12 @@ g_width = 0
 g_height = 0
 g_matrix = {}
 
-g_tick = 0
-g_speed = 0.1 -- seconds
+a_tick = 0
+b_tick = 0
+
+-- affected by haste/slow items
+a_speed = 0.15 -- seconds
+b_speed = 0.15 -- seconds
 
 SNAKE_A = "SNAKE_A"
 SNAKE_B = "SNAKE_B"
@@ -147,13 +151,16 @@ end
 
 -------------------------------------------------------------------------------
 function love.update(dt)
-	g_tick = g_tick + dt
-	if g_tick < g_speed then
-		return
+	a_tick = a_tick + dt
+	b_tick = b_tick + dt
+	if a_tick >= a_speed then
+		a_tick = a_tick - a_speed
+		update_snake_a()
 	end
-	g_tick = g_tick - g_speed
-	update_snake_a()
-	update_snake_b()
+	if b_tick >= b_speed then
+		b_tick = b_tick - b_speed
+		update_snake_b()
+	end
 	update_apples()
 end
 
