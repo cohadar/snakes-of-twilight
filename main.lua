@@ -25,6 +25,9 @@ a_head_y = 0
 b_head_x = 0
 b_head_y = 0
 
+a_apples = 0
+b_apples = 0
+
 -------------------------------------------------------------------------------
 function M(x, y) 
 	return g_matrix[ y * g_width + x ]
@@ -32,8 +35,6 @@ end
 
 -------------------------------------------------------------------------------
 function love.load()
-	-- g_background1 = love.graphics.newImage("tennis_ball.png")
-
 	g_width = math.floor(love.graphics.getWidth() / g_rect)
 	g_height = math.floor(love.graphics.getHeight() / g_rect)
 
@@ -73,6 +74,8 @@ function love.load()
 	a_tail_y = a_head_y
 
 	M(b_head_x, b_head_y).b = true
+
+	M(20, 20).apples = 4
 end
 
 -------------------------------------------------------------------------------
@@ -106,9 +109,16 @@ function update_snake_a()
 	old_head.a_prev_x = a_head_x
 	old_head.a_prev_y = a_head_y
 	local tail = M(a_tail_x, a_tail_y)
-	tail.a = false
-	a_tail_x = tail.a_prev_x
-	a_tail_y = tail.a_prev_y
+	if M(a_head_x, a_head_y).apples then
+		a_apples = M(a_head_x, a_head_y).apples
+	end
+	if a_apples > 0 then
+		a_apples = a_apples - 1
+	else
+		tail.a = false
+		a_tail_x = tail.a_prev_x
+		a_tail_y = tail.a_prev_y
+	end
 end 
 
 -------------------------------------------------------------------------------
@@ -187,10 +197,18 @@ function draw_head_b(x, y)
 end 
 
 -------------------------------------------------------------------------------
+function draw_apple(x, y)
+	love.graphics.setColor(0xE0, 0x00, 0x00, 0xFF)
+	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
+end 
+
+-------------------------------------------------------------------------------
 function love.draw()
 	for x = 0, g_width-1 do 
 		for y = 0, g_height-1 do 
-			if x == a_head_x and y == a_head_y then
+			if M(x, y).apples then
+				draw_apple(x, y)
+			elseif x == a_head_x and y == a_head_y then
 				draw_head_a(x, y)
 			elseif M(x, y).a then
 				draw_tail_a(x, y)	
