@@ -41,8 +41,8 @@ function love.load()
 	end
 	end
 
-	a_snake.init(SNAKE_A, 10, 10, EAST)
-	b_snake.init(SNAKE_B, 10, 20, EAST)
+	a_snake.init(SNAKE_A, 10, 10, EAST, 5)
+	b_snake.init(SNAKE_B, 10, 20, EAST, 5)
 end
 
 -------------------------------------------------------------------------------

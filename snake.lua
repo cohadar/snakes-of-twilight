@@ -18,38 +18,24 @@ local dead = false
 local direction = EAST
 
 -------------------------------------------------------------------------------
-function m_snake.init(snake_id, x, y, _direction)
+function m_snake.init(snake_id, x, y, _direction, size)
 	direction = _direction
 	id = snake_id
 
 	head_x = x
 	head_y = y
 
-	m_apples.eats(snake_id, 10)
-
-	local head = M(head_x, head_y)
-	head.data   =  snake_id
+	local head  = M(head_x, head_y)
+	head.data   = snake_id
 	head.prev_x = nil
 	head.prev_y = nil
-	head.next_x = head_x - 1
-	head.next_y = head_y
-	
-	local body = M(head_x-1, head_y)
-	body.data   = snake_id
-	body.prev_x = head_x
-	body.prev_y = head_y
-	body.next_x = head_x - 2
-	body.next_y = head_y
+	head.next_x = nil
+	head.next_y = nil
 
-	local tail = M(head_x-2, head_y)
-	tail.data   = snake_id
-	tail.prev_x = head_x - 1
-	tail.prev_y = head_y 
-	tail.next_x = nil
-	tail.next_y = nil
-
-	tail_x = head_x - 2
+	tail_x = head_x
 	tail_y = head_y
+
+	m_apples.eats(snake_id, size - 1)
 end
 
 -------------------------------------------------------------------------------
