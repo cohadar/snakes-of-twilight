@@ -1,5 +1,8 @@
 io.stdout:setvbuf("no")
 
+m_apples = require "apples"
+m_draw   = require "draw"
+
 g_rect = 20
 g_width = 0
 g_height = 0
@@ -29,7 +32,7 @@ a_head_y = 0
 b_head_x = 0
 b_head_y = 0
 
-m_apples = require "apples"
+APPLE_SIZE = 4 -- number of snake segments eating one apple gives 
 
 -------------------------------------------------------------------------------
 function M(x, y) 
@@ -146,7 +149,7 @@ function love.update(dt)
 		local y = math.floor( love.math.random() * g_height )
 		if not M(x, y).apples then
 			m_apples.add()
-			M(x, y).apples = 4
+			M(x, y).apples = APPLE_SIZE
 		end
 	end
 end
@@ -174,67 +177,24 @@ function love.keypressed(key)
 	end
 end
 
-
--------------------------------------------------------------------------------
-function draw_background_1(x, y)
-	love.graphics.setColor(0xFF, 0xCC, 0x00, 0xFF)
-	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
-	love.graphics.setColor(0x00, 0x00, 0x00, 0x80)
-	love.graphics.rectangle("line", x*g_rect, y*g_rect, g_rect, g_rect)
-end 
-
-
--------------------------------------------------------------------------------
-function draw_background_2(x, y)
-	love.graphics.setColor(0xEE, 0xBB, 0x00, 0xFF)
-	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
-	love.graphics.setColor(0x00, 0x00, 0x00, 0x80)
-	love.graphics.rectangle("line", x*g_rect, y*g_rect, g_rect, g_rect)
-end 
-
--------------------------------------------------------------------------------
-function draw_head_a(x, y)
-	love.graphics.setColor(0xDD, 0xFF, 0xDD, 0xFF)
-	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
-end 
-
--------------------------------------------------------------------------------
-function draw_tail_a(x, y)
-	love.graphics.setColor(0x77, 0x50, 0xDD, 0xFF)
-	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
-end 
-
--------------------------------------------------------------------------------
-function draw_head_b(x, y)
-	love.graphics.setColor(0xDD, 0xDD, 0xFF, 0xFF)
-	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
-end 
-
--------------------------------------------------------------------------------
-function draw_apple(x, y)
-	love.graphics.setColor(0xE0, 0x00, 0x00, 0xFF)
-	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
-end 
-
 -------------------------------------------------------------------------------
 function love.draw()
 	for x = 0, g_width-1 do 
 		for y = 0, g_height-1 do 
 			if M(x, y).apples then
-				draw_apple(x, y)
+				m_draw.apple(x, y)
 			elseif x == a_head_x and y == a_head_y then
-				draw_head_a(x, y)
+				m_draw.head_a(x, y)
 			elseif M(x, y).a then
-				draw_tail_a(x, y)	
+				m_draw.tail_a(x, y)	
 			elseif x == b_head_x and y == b_head_y then
-				draw_head_b(x, y)
+				m_draw.head_b(x, y)
 			elseif x % 2 == 0 and y % 2 == 0 then
-				draw_background_2(x, y)
+				m_draw.background_2(x, y)
 			else
-				draw_background_1(x, y)
+				m_draw.background_1(x, y)
 			end
-			love.graphics.setColor(0x00, 0x00, 0x00, 0x80)
-			love.graphics.rectangle("line", x*g_rect, y*g_rect, g_rect, g_rect)
+			m_draw.lines(x, y)
 		end
 	end
 	love.graphics.print("x=".. a_head_x ..", y=" .. a_head_y, 100, 100)
