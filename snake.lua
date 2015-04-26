@@ -1,8 +1,6 @@
 --- @module snake
 local m_snake = {}
 
-local direction = EAST
-
 local tick = 0
 -- affected by haste/slow items
 local speed = 0.15 -- seconds
@@ -17,12 +15,17 @@ local id = "x"
 
 local dead = false
 
+local direction = EAST
+
 -------------------------------------------------------------------------------
-function m_snake.init(snake_id, x, y)
+function m_snake.init(snake_id, x, y, _direction)
+	direction = _direction
 	id = snake_id
 
 	head_x = x
 	head_y = y
+
+	m_apples.eats(snake_id, 10)
 
 	local head = M(head_x, head_y)
 	head.data   =  snake_id

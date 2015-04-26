@@ -10,11 +10,6 @@ g_matrix = {}
 
 g_ended = false
 
-NORTH = "NORTH"
-SOUTH = "SOUTH"
-EAST  = "EAST"
-WEST  = "WEST"
-
 SNAKE_A = "SNAKE_A"
 SNAKE_B = "SNAKE_B"
 
@@ -22,6 +17,11 @@ a_snake = require "snake"
 package.loaded["snake"] = nil
 b_snake = require "snake"
 package.loaded["snake"] = nil
+
+NORTH = "NORTH"
+SOUTH = "SOUTH"
+EAST  = "EAST"
+WEST  = "WEST"
 
 APPLE_SIZE = 4 -- number of snake segments eating one apple gives 
 
@@ -41,8 +41,8 @@ function love.load()
 	end
 	end
 
-	a_snake.init(SNAKE_A, 10, 10)
-	b_snake.init(SNAKE_B, 10, 20)
+	a_snake.init(SNAKE_A, 10, 10, EAST)
+	b_snake.init(SNAKE_B, 10, 20, EAST)
 end
 
 -------------------------------------------------------------------------------
@@ -91,14 +91,18 @@ function love.draw()
 		for y = 0, g_height-1 do 
 			if M(x, y).apples then
 				m_draw.apple(x, y)
-			elseif a_snake.is_head(x, y) then
-				m_draw.head_a(x, y)
-			elseif b_snake.is_head(x, y) then
-				m_draw.head_b(x, y)
 			elseif M(x, y).data == SNAKE_A then
-				m_draw.tail_a(x, y)	
+				if a_snake.is_head(x, y) then
+					m_draw.head_a(x, y)
+				else
+					m_draw.tail_a(x, y)	
+				end
 			elseif M(x, y).data == SNAKE_B then
-				m_draw.tail_b(x, y)	
+				if b_snake.is_head(x, y) then
+					m_draw.head_b(x, y)
+				else
+					m_draw.tail_b(x, y)	
+				end
 			elseif x % 2 == 0 and y % 2 == 0 then
 				m_draw.background_2(x, y)
 			else
