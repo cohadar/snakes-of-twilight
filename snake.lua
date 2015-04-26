@@ -81,6 +81,7 @@ local function update_snake()
 	if M(head_x, head_y).apples then
 		m_apples.eats(id, M(head_x, head_y).apples)
 		M(head_x, head_y).apples = nil
+		m_sound.apple_bite()
 	end
 	if not m_apples.digesting(id) then
 		tail.data = false

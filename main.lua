@@ -3,6 +3,7 @@ io.stdout:setvbuf("no")
 m_apples = require "apples"
 m_draw   = require "draw"
 m_color  = require "color"
+m_sound  = require "sound"
 
 g_offset_x = 0
 g_offset_y = 50.0
@@ -35,6 +36,7 @@ WEST  = "WEST"
 
 APPLE_SIZE = 4 -- number of snake segments eating one apple gives 
 
+
 -------------------------------------------------------------------------------
 function M(x, y) 
 	return g_matrix[ y * g_width + x ]
@@ -59,6 +61,7 @@ function love.load()
 	local font = love.graphics.newFont("OpenSans-Regular.ttf", 40)
 	love.graphics.setFont(font)
 	reset_level()
+	m_sound.init()
 end
 
 -------------------------------------------------------------------------------
@@ -79,12 +82,15 @@ function love.update(dt)
 
 	if a_snake.is_dead() then
 		g_score_b = g_score_b + 1
+		m_sound.death()
 	end
 	if b_snake.is_dead() then
 		g_score_a = g_score_a + 1
+		m_sound.death()
 	end
 	if g_score_a == MAX_SCORE or g_score_b == MAX_SCORE then
 		g_the_end = true
+		m_sound.the_end()
 	end 
 end
 
