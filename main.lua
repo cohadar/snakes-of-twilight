@@ -3,6 +3,10 @@ io.stdout:setvbuf("no")
 m_apples = require "apples"
 m_draw   = require "draw"
 
+
+g_offset_x = 0
+g_offset_y = 50.0
+
 g_rect = 20
 g_width = 0
 g_height = 0
@@ -32,8 +36,9 @@ end
 
 -------------------------------------------------------------------------------
 function love.load()
-	g_width = math.floor(love.graphics.getWidth() / g_rect)
-	g_height = math.floor(love.graphics.getHeight() / g_rect)
+	g_width = math.floor((love.graphics.getWidth() - g_offset_x) / g_rect)
+	g_height = math.floor((love.graphics.getHeight() - g_offset_y) / g_rect) 
+	print("" .. g_height)
 
 	for x = 0, g_width-1 do 
 	for y = 0, g_height-1 do 
@@ -86,32 +91,40 @@ function love.keypressed(key)
 end
 
 -------------------------------------------------------------------------------
+local function draw(x, y)
+	if M(x, y).apples then
+		m_draw.apple(x, y)
+	elseif M(x, y).data == SNAKE_A then
+		if a_snake.is_head(x, y) then
+			m_draw.head_a(x, y)
+		else
+			m_draw.tail_a(x, y)	
+		end
+	elseif M(x, y).data == SNAKE_B then
+		if b_snake.is_head(x, y) then
+			m_draw.head_b(x, y)
+		else
+			m_draw.tail_b(x, y)	
+		end
+	elseif x % 2 == 0 and y % 2 == 0 then
+		m_draw.background_2(x, y)
+	else
+		m_draw.background_1(x, y)
+	end
+end
+
+-------------------------------------------------------------------------------
 function love.draw()
+	love.graphics.push()
+	love.graphics.translate(g_offset_x, g_offset_y)
 	for x = 0, g_width-1 do 
 		for y = 0, g_height-1 do 
-			if M(x, y).apples then
-				m_draw.apple(x, y)
-			elseif M(x, y).data == SNAKE_A then
-				if a_snake.is_head(x, y) then
-					m_draw.head_a(x, y)
-				else
-					m_draw.tail_a(x, y)	
-				end
-			elseif M(x, y).data == SNAKE_B then
-				if b_snake.is_head(x, y) then
-					m_draw.head_b(x, y)
-				else
-					m_draw.tail_b(x, y)	
-				end
-			elseif x % 2 == 0 and y % 2 == 0 then
-				m_draw.background_2(x, y)
-			else
-				m_draw.background_1(x, y)
-			end
-			m_draw.lines(x, y)
+			draw(x, y)
 		end
 	end
-	-- love.graphics.print("x=".. a_head_x ..", y=" .. a_head_y, 100, 100)
+	love.graphics.pop()
+	love.graphics.setColor(0x00, 0x00, 0x00, 0xFF)
+	love.graphics.rectangle("fill", 0, 0, g_width * g_rect, g_offset_y)
 end
 
 -------------------------------------------------------------------------------
