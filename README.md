@@ -1,4 +1,9 @@
-# snakes-of-twilight
-2 player snakes game made in Love2D
+# Mighty Cohadar's Snakes of Twilight
 
-In progress, expected to be done in couple of days.
+Two player 2D game created with Love2D
+
+You will need to download the game engine here: https://www.love2d.org/
+
+You can run the game by simply dragging whole game directory onto love app.
+
+<img src="https://github.com/cohadar/snakes-of-twilight/blob/master/screenshot.png">
