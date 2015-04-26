@@ -50,6 +50,12 @@ function m_draw.big_apple(x, y)
 end 
 
 -------------------------------------------------------------------------------
+function m_draw.speed_apple(x, y)
+	love.graphics.setColor(0x00, 0xFF, 0xFF, 0xFF)
+	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
+end 
+
+-------------------------------------------------------------------------------
 function m_draw.pause_message()
 	local x = math.floor(g_width * g_rect / 2)
 	if g_the_end then
@@ -85,8 +91,10 @@ function m_draw.cell(x, y)
 	if M(x, y).apples then
 		if M(x, y).apples == APPLE_SIZE then
 			m_draw.apple(x, y)
-		else
+		elseif M(x, y).apples == APPLE_SIZE * 2 then
 			m_draw.big_apple(x, y)
+		else
+			m_draw.speed_apple(x, y)
 		end
 	elseif M(x, y).data == SNAKE_A then
 		if a_snake.is_head(x, y) then

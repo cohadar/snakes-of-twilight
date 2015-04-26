@@ -20,7 +20,7 @@ local direction = EAST
 -------------------------------------------------------------------------------
 function m_snake.init(snake_id, x, y, _direction, size)
 	tick = 0
-	speed = 0.15
+	speed = 0.16
 	dead = false
 
 	direction = _direction
@@ -80,6 +80,12 @@ local function update_snake()
 	local tail = M(tail_x, tail_y)
 	if M(head_x, head_y).apples then
 		m_apples.eats(id, M(head_x, head_y).apples)
+		if M(head_x, head_y).apples == 1 then
+			speed = speed - 0.02
+			if speed < 0.06 then
+				speed = 0.06
+			end
+		end
 		M(head_x, head_y).apples = nil
 		m_sound.apple_bite()
 	end

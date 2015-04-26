@@ -76,7 +76,10 @@ function love.update(dt)
 		local y = math.floor( love.math.random() * g_height )
 		if not M(x, y).apples then
 			m_apples.add()
-			if love.math.random() < 0.1 then
+			local r = love.math.random()
+			if r < 0.5 then
+				M(x, y).apples = 1
+			elseif r < 0.1 then 
 				M(x, y).apples = APPLE_SIZE * 2
 			else
 				M(x, y).apples = APPLE_SIZE
