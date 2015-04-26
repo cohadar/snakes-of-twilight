@@ -29,11 +29,7 @@ a_head_y = 0
 b_head_x = 0
 b_head_y = 0
 
-a_apples = 0
-b_apples = 0
-
-g_max_apples = 17
-g_apple_count = 0
+m_apples = require "apples"
 
 -------------------------------------------------------------------------------
 function M(x, y) 
@@ -119,13 +115,10 @@ function update_snake_a()
 	old_head.a_prev_y = a_head_y
 	local tail = M(a_tail_x, a_tail_y)
 	if M(a_head_x, a_head_y).apples then
-		a_apples = a_apples + M(a_head_x, a_head_y).apples
+		m_apples.a_eats(M(a_head_x, a_head_y).apples)
 		M(a_head_x, a_head_y).apples = nil
-		g_apple_count = g_apple_count - 1
 	end
-	if a_apples > 0 then
-		a_apples = a_apples - 1
-	else
+	if not m_apples.a_digesting() then
 		tail.a = false
 		a_tail_x = tail.a_prev_x
 		a_tail_y = tail.a_prev_y
@@ -134,19 +127,6 @@ end
 
 -------------------------------------------------------------------------------
 function update_snake_b()
-end 
-
-
--------------------------------------------------------------------------------
-function update_apples()
-	if g_apple_count < g_max_apples then
-		local x = math.floor( love.math.random() * g_width )
-		local y = math.floor( love.math.random() * g_height )
-		if not M(x, y).apples then
-			M(x, y).apples = 4
-			g_apple_count = g_apple_count + 1
-		end
-	end
 end 
 
 -------------------------------------------------------------------------------
@@ -161,9 +141,15 @@ function love.update(dt)
 		b_tick = b_tick - b_speed
 		update_snake_b()
 	end
-	update_apples()
+	if not m_apples.full() then
+		local x = math.floor( love.math.random() * g_width )
+		local y = math.floor( love.math.random() * g_height )
+		if not M(x, y).apples then
+			m_apples.add()
+			M(x, y).apples = 4
+		end
+	end
 end
-
 
 -------------------------------------------------------------------------------
 function love.keypressed(key)
