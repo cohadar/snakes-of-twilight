@@ -3,8 +3,14 @@ local m_apples = {}
 
 local apples = {}
 
-local max_apples = 17
+local max_apples = 0
 local apple_count = 0
+
+-------------------------------------------------------------------------------
+function m_apples.init()
+	max_apples = 17
+	apple_count = 0
+end
 
 -------------------------------------------------------------------------------
 function m_apples.eats(snake_id, num_eaten)

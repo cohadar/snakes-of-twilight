@@ -3,37 +3,37 @@ local m_draw = {}
 
 -------------------------------------------------------------------------------
 function m_draw.background_1(x, y)
-	love.graphics.setColor(0xFF, 0xCC, 0x00, 0xFF)
+	m_color.background_1()
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
 end 
 
 -------------------------------------------------------------------------------
 function m_draw.background_2(x, y)
-	love.graphics.setColor(0xEE, 0xBB, 0x00, 0xFF)
+	m_color.background_2()
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
 end 
 
 -------------------------------------------------------------------------------
 function m_draw.head_a(x, y)
-	love.graphics.setColor(0xDD, 0xFF, 0xDD, 0xFF)
+	m_color.snake_a_head()
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
 end 
 
 -------------------------------------------------------------------------------
 function m_draw.tail_a(x, y)
-	love.graphics.setColor(0x77, 0x50, 0xDD, 0xFF)
+	m_color.snake_a()
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
 end 
 
 -------------------------------------------------------------------------------
 function m_draw.head_b(x, y)
-	love.graphics.setColor(0xDD, 0xDD, 0xFF, 0xFF)
+	m_color.snake_b_head()
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
 end 
 
 -------------------------------------------------------------------------------
 function m_draw.tail_b(x, y)
-	love.graphics.setColor(0x33, 0xFF, 0x66, 0xFF)
+	m_color.snake_b()
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect-1, g_rect-1)
 end 
 

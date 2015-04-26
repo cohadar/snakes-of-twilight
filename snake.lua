@@ -3,7 +3,7 @@ local m_snake = {}
 
 local tick = 0
 -- affected by haste/slow items
-local speed = 0.15 -- seconds
+local speed = 0 -- seconds
 
 local head_x = 0
 local head_y = 0
@@ -19,6 +19,10 @@ local direction = EAST
 
 -------------------------------------------------------------------------------
 function m_snake.init(snake_id, x, y, _direction, size)
+	tick = 0
+	speed = 0.15
+	dead = false
+
 	direction = _direction
 	id = snake_id
 
@@ -64,6 +68,7 @@ local function update_snake()
 	if head.data then
 		dead = true
 		g_ended = true
+		g_pause = true
 	end 
 	head.data = id
 	head.prev_x = nil
