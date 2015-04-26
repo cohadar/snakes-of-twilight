@@ -49,8 +49,9 @@ function reset_level()
 		g_matrix[ y * g_width + x ] = {}
 	end
 	end
-	a_snake.init(SNAKE_A, 10, 10, EAST, 5)
-	b_snake.init(SNAKE_B, 10, 20, EAST, 5)
+	y = math.floor(g_height/2)
+	a_snake.init(SNAKE_A, 10, y, EAST, 5)
+	b_snake.init(SNAKE_B, g_width - 10, y, WEST, 5)
 	m_apples.init()
 end
 
@@ -116,21 +117,21 @@ function love.keypressed(key)
 	end
 
 	if key == "up" then
-		a_snake.up()
-	elseif key == "down" then
-		a_snake.down()
-	elseif key == "left" then
-		a_snake.left()
-	elseif key == "right" then
-		a_snake.right()
-	elseif key == "w" then
 		b_snake.up()
-	elseif key == "s" then
+	elseif key == "down" then
 		b_snake.down()
-	elseif key == "a" then
+	elseif key == "left" then
 		b_snake.left()
+	elseif key == "right" then
+		b_snake.right()
+	elseif key == "w" then
+		a_snake.up()
+	elseif key == "s" then
+		a_snake.down()
+	elseif key == "a" then
+		a_snake.left()
 	elseif key == "d" then
-		b_snake.right()		
+		a_snake.right()		
 	end
 end
 
