@@ -15,7 +15,13 @@ SOUTH = "SOUTH"
 EAST  = "EAST"
 WEST  = "WEST"
 
+SNAKE_A = "SNAKE_A"
+SNAKE_B = "SNAKE_B"
+
 a_snake = require "snake"
+package.loaded["snake"] = nil
+b_snake = require "snake"
+package.loaded["snake"] = nil
 
 APPLE_SIZE = 4 -- number of snake segments eating one apple gives 
 
@@ -35,9 +41,9 @@ function love.load()
 	end
 	end
 
-	a_snake.init("a")
+	a_snake.init(SNAKE_A, 10, 10)
+	b_snake.init(SNAKE_B, 10, 20)
 end
-
 
 -------------------------------------------------------------------------------
 function love.update(dt)
@@ -45,6 +51,7 @@ function love.update(dt)
 		return 
 	end
 	a_snake.update(dt)
+	b_snake.update(dt)
 	if not m_apples.full() then
 		local x = math.floor( love.math.random() * g_width )
 		local y = math.floor( love.math.random() * g_height )
@@ -67,6 +74,14 @@ function love.keypressed(key)
 		a_snake.left()
 	elseif key == "right" then
 		a_snake.right()
+	elseif key == "w" then
+		b_snake.up()
+	elseif key == "s" then
+		b_snake.down()
+	elseif key == "a" then
+		b_snake.left()
+	elseif key == "d" then
+		b_snake.right()		
 	end
 end
 
@@ -78,10 +93,12 @@ function love.draw()
 				m_draw.apple(x, y)
 			elseif a_snake.is_head(x, y) then
 				m_draw.head_a(x, y)
-			elseif M(x, y).data then
+			elseif b_snake.is_head(x, y) then
+				m_draw.head_b(x, y)
+			elseif M(x, y).data == SNAKE_A then
 				m_draw.tail_a(x, y)	
-			--elseif x == b_head_x and y == b_head_y then
-			--	m_draw.head_b(x, y)
+			elseif M(x, y).data == SNAKE_B then
+				m_draw.tail_b(x, y)	
 			elseif x % 2 == 0 and y % 2 == 0 then
 				m_draw.background_2(x, y)
 			else

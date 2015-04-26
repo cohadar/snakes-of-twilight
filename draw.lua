@@ -32,6 +32,12 @@ function m_draw.head_b(x, y)
 end 
 
 -------------------------------------------------------------------------------
+function m_draw.tail_b(x, y)
+	love.graphics.setColor(0x33, 0xFF, 0x66, 0xFF)
+	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)
+end 
+
+-------------------------------------------------------------------------------
 function m_draw.apple(x, y)
 	love.graphics.setColor(0xE0, 0x00, 0x00, 0xFF)
 	love.graphics.rectangle("fill", x*g_rect, y*g_rect, g_rect, g_rect)

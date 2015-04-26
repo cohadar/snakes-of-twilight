@@ -1,22 +1,27 @@
 --- @module apples
 local m_apples = {}
 
-local a_apples = 0
-local b_apples = 0
+local apples = {}
 
 local max_apples = 17
 local apple_count = 0
 
 -------------------------------------------------------------------------------
-function m_apples.a_eats(num_eaten)
-	a_apples = a_apples + num_eaten
+function m_apples.eats(snake_id, num_eaten)
+	if not apples[snake_id] then
+		apples[snake_id] = 0
+	end
+	apples[snake_id] = apples[snake_id] + num_eaten
 	apple_count = apple_count - 1
 end
 
 -------------------------------------------------------------------------------
-function m_apples.a_digesting()
-	if a_apples > 0 then
-		a_apples = a_apples - 1
+function m_apples.digesting(snake_id)
+	if not apples[snake_id] then
+		apples[snake_id] = 0
+	end
+	if apples[snake_id] > 0 then
+		apples[snake_id] = apples[snake_id] - 1
 		return true
 	end
 	return false

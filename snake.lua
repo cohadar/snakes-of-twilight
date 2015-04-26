@@ -18,11 +18,11 @@ local id = "x"
 local dead = false
 
 -------------------------------------------------------------------------------
-function m_snake.init(snake_id)
+function m_snake.init(snake_id, x, y)
 	id = snake_id
 
-	head_x = 10
-	head_y = 10
+	head_x = x
+	head_y = y
 
 	local head = M(head_x, head_y)
 	head.data   =  snake_id
@@ -85,10 +85,10 @@ local function update_snake()
 	old_head.prev_y = head_y
 	local tail = M(tail_x, tail_y)
 	if M(head_x, head_y).apples then
-		m_apples.a_eats(M(head_x, head_y).apples)
+		m_apples.eats(id, M(head_x, head_y).apples)
 		M(head_x, head_y).apples = nil
 	end
-	if not m_apples.a_digesting() then
+	if not m_apples.digesting(id) then
 		tail.data = false
 		tail_x = tail.prev_x
 		tail_y = tail.prev_y
@@ -113,21 +113,21 @@ end
 
 -------------------------------------------------------------------------------
 function m_snake.down()
-	if M(head_x, head_y).a_next_x ~= head_x then
+	if M(head_x, head_y).next_x ~= head_x then
 		direction = SOUTH
 	end	
 end
 
 -------------------------------------------------------------------------------
 function m_snake.left()
-	if M(head_x, head_y).a_next_y ~= head_y then
+	if M(head_x, head_y).next_y ~= head_y then
 		direction = WEST
 	end
 end
 
 -------------------------------------------------------------------------------
 function m_snake.right()
-	if M(head_x, head_y).a_next_y ~= head_y then
+	if M(head_x, head_y).next_y ~= head_y then
 		direction = EAST
 	end	
 end
