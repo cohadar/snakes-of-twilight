@@ -63,6 +63,7 @@ function love.load()
 	love.graphics.setFont(font)
 	reset_level()
 	m_sound.init()
+	love.mouse.setVisible(false)
 end
 
 -------------------------------------------------------------------------------
@@ -75,7 +76,11 @@ function love.update(dt)
 		local y = math.floor( love.math.random() * g_height )
 		if not M(x, y).apples then
 			m_apples.add()
-			M(x, y).apples = APPLE_SIZE
+			if love.math.random() < 0.1 then
+				M(x, y).apples = APPLE_SIZE * 2
+			else
+				M(x, y).apples = APPLE_SIZE
+			end
 		end
 	end
 	a_snake.update(dt)

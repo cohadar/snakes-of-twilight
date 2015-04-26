@@ -8,7 +8,7 @@ local apple_count = 0
 
 -------------------------------------------------------------------------------
 function m_apples.init()
-	max_apples = 17
+	max_apples = 10
 	apple_count = 0
 end
 
