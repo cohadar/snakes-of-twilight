@@ -77,10 +77,10 @@ function love.update(dt)
 		if not M(x, y).apples then
 			m_apples.add()
 			local r = love.math.random()
-			if r < 0.5 then
+			if r < 0.05 then
 				M(x, y).apples = 1
 			elseif r < 0.1 then 
-				M(x, y).apples = APPLE_SIZE * 2
+				M(x, y).apples = APPLE_SIZE * 3
 			else
 				M(x, y).apples = APPLE_SIZE
 			end

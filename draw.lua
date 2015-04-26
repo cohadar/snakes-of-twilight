@@ -91,7 +91,7 @@ function m_draw.cell(x, y)
 	if M(x, y).apples then
 		if M(x, y).apples == APPLE_SIZE then
 			m_draw.apple(x, y)
-		elseif M(x, y).apples == APPLE_SIZE * 2 then
+		elseif M(x, y).apples == APPLE_SIZE * 3 then
 			m_draw.big_apple(x, y)
 		else
 			m_draw.speed_apple(x, y)
